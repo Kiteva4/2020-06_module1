@@ -24,6 +24,8 @@ public class Character : MonoBehaviour {
     public float runSpeed;
     public float distanceFromEnemy;
     public Transform target;
+    public Character targetCharacter;
+
     public State state;
     Animator animator;
     Vector3 originalPosition;
@@ -32,6 +34,7 @@ public class Character : MonoBehaviour {
     [SerializeField] GameObject actionBar;
     // Start is called before the first frame update
     void Start () {
+        targetCharacter = target.GetComponent<Character> ();
         animator = GetComponentInChildren<Animator> ();
         state = State.Idle;
         originalPosition = transform.position;
@@ -43,7 +46,7 @@ public class Character : MonoBehaviour {
     }
 
     public void KillTarget () {
-        if (target.GetComponent<Character> ().state != State.Death) {
+        if (targetCharacter.state != State.Death) {
             target.GetComponentInChildren<Animator> ().SetTrigger ("Dead");
             actionBar.SetActive (false);
         }
@@ -57,7 +60,9 @@ public class Character : MonoBehaviour {
 
     // [ContextMenu("Attack")]
     public void AttackEnemy () {
-        if (state == State.Death)
+        if (state == State.Death ||
+            state != State.Idle ||
+            targetCharacter.state == State.Death)
             return;
 
         switch (weapon) {
