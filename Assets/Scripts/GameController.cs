@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public Button switchButton;
     [SerializeField] private Character[] playerCharacters = default;
     [SerializeField] private Character[] enemyCharacters = default;
+    [SerializeField] UIController uIController;
     Character currentTarget;
     bool waitingForInput;
 
@@ -72,12 +73,17 @@ public class GameController : MonoBehaviour
 
     void PlayerWon()
     {
-        Debug.Log("Player won");
+        // Debug.Log("Player won");
+        uIController.OpenEndGameResult("You win!");
+        Utility.SetCanvasGroupEnabled(buttonsCanvasGroup, true);
     }
 
     void PlayerLost()
     {
-        Debug.Log("Player lost");
+        // Debug.Log("Player lost");
+        uIController.OpenEndGameResult("You lose! Try again");
+        Utility.SetCanvasGroupEnabled(buttonsCanvasGroup, true);
+
     }
 
     bool CheckEndGame()
